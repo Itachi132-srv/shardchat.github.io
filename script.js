@@ -1,38 +1,65 @@
-function loginUser() {
-    const email = document.getElementById('email').value;
-    
-    if (email.trim() === "") {
-        alert("Please enter a valid email address!");
+let currentUser = {
+    email: "",
+    name: "",
+    bio: "",
+    pfp: ""
+};
+
+function handleLogin() {
+    const email = document.getElementById('email-input').value.trim();
+    const password = document.getElementById('password-input').value.trim();
+    const name = document.getElementById('username-input').value.trim();
+    const bio = document.getElementById('bio-input').value.trim();
+    const pfp = document.getElementById('pfp-input').value.trim();
+
+    if (!email || !password || !name) {
+        alert("Please fill in at least Email, Password, and Username!");
         return;
     }
 
-    // Hide Login Screen and Show Chat Screen
+    currentUser.email = email;
+    currentUser.name = name;
+    currentUser.bio = bio || "Available";
+    currentUser.pfp = pfp || "https://via.placeholder.com/70";
+
+    document.getElementById('display-name').innerText = currentUser.name;
+    document.getElementById('display-bio').innerText = currentUser.bio;
+    document.getElementById('display-pfp').src = currentUser.pfp;
+
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('chat-screen').style.display = 'flex';
-
-    // Set profile name based on email prefix
-    const username = email.split('@')[0];
-    document.getElementById('display-name').innerText = username;
 }
 
 function sendMessage() {
     const inputField = document.getElementById('message-input');
-    const messageText = inputField.value.trim();
+    const text = inputField.value.trim();
 
-    if (messageText === "") return;
+    if (text === "") return;
 
     const messagesBox = document.getElementById('messages');
-    
-    // Create message element
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message');
-    messageDiv.innerText = messageText;
 
-    // Append to chat box
-    messagesBox.appendChild(messageDiv);
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message');
 
-    // Clear input & scroll to bottom
+    msgDiv.innerHTML = `
+        <div class="sender-name">${currentUser.name}</div>
+        <div>${text}</div>
+    `;
+
+    messagesBox.appendChild(msgDiv);
+
     inputField.value = "";
     messagesBox.scrollTop = messagesBox.scrollHeight;
 }
 
+function checkEnter(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+function handleLogout() {
+    document.getElementById('chat-screen').style.display = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('messages').innerHTML = '';
+}
