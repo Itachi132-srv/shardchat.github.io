@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purple Chat App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="auth-screen" class="container">
+        <div class="card">
+            <h2>💜 Purple Chat</h2>
+            <p>Login or Register with your Email</p>
+            <input type="email" id="email" placeholder="Enter your email">
+            <input type="password" id="password" placeholder="Enter password">
+            <button onclick="loginUser()">Login / Sign Up</button>
+        </div>
+    </div>
+
+    <!-- Chat Screen (Hidden by default) -->
+    <div id="chat-screen" class="chat-container" style="display: none;">
+        <div class="sidebar">
+            <h3>Profile</h3>
+            <div class="profile-box">
+                <img id="display-pfp" src="https://via.placeholder.com/60" alt="PFP">
+                <h4 id="display-name">Username</h4>
+                <p id="display-bio">Hey there! I am using Purple Chat.</p>
+            </div>
+        </div>
+        <div class="chat-area">
+            <div class="chat-header">
+                <h3>Global Chat Room</h3>
+            </div>
+            <div id="messages" class="messages-box">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="chat-input-box">
+                <input type="text" id="message-input" placeholder="Type a message or use emojis 😊...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
