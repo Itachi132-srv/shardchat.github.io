@@ -3,52 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purple Chat App</title>
+    <title>Secure Private Messaging</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Auth / Registration Screen -->
-    <div id="auth-screen" class="auth-container">
-        <div class="card">
-            <h2>Purple Chat</h2>
-            <p>Register or Login via Email</p>
-            <input type="email" id="email-input" placeholder="Enter Email Address">
-            <input type="password" id="password-input" placeholder="Enter Password">
-            <input type="text" id="username-input" placeholder="Enter Display Name">
-            <textarea id="bio-input" placeholder="Enter Bio" rows="2"></textarea>
-            <input type="text" id="pfp-input" placeholder="Profile Picture Image URL">
-            <button onclick="handleLogin()">Start Chatting</button>
-        </div>
+    <!-- Authentication Screen -->
+    <div id="auth-wrapper" class="glass-card">
+        <h2 style="color: var(--accent-purple); margin-bottom: 10px;">Welcome Back</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">Connect with your friends privately.</p>
+        
+        <input type="email" id="login-email" placeholder="Email Address">
+        <input type="password" id="login-password" placeholder="Password">
+        <button onclick="authenticateUser()">Login</button>
     </div>
 
-    <!-- Chat Screen -->
-    <div id="chat-screen" class="chat-container">
-        <div class="sidebar">
-            <div>
-                <h3>My Profile</h3>
-                <div class="profile-box">
-                    <img id="display-pfp" src="https://via.placeholder.com/70" alt="PFP">
-                    <h4 id="display-name">Username</h4>
-                    <p id="display-bio">Bio goes here...</p>
-                </div>
+    <!-- Main Messaging Interface (Hidden by default) -->
+    <div id="app-wrapper" style="display: none; width: 100vw; height: 100vh; display: flex;">
+        <!-- Left Navigation Sidebar -->
+        <div style="width: 280px; background: var(--bg-secondary); border-right: 1px solid var(--border-glass); display: flex; flex-direction: column; padding: 20px;">
+            <h3 style="color: var(--accent-purple); margin-bottom: 20px;">Direct Messages</h3>
+            <div id="friends-list" style="flex: 1; overflow-y: auto;">
+                <!-- Dynamically populated friend list items -->
             </div>
-            <button class="logout-btn" onclick="handleLogout()">Log Out</button>
         </div>
-        <div class="chat-area">
-            <div class="chat-header">
-                <h3>Global Public Room (Unlimited Messaging)</h3>
+
+        <!-- Chat Panel Area -->
+        <div style="flex: 1; display: flex; flex-direction: column; background: var(--bg-primary);">
+            <div style="padding: 20px; border-bottom: 1px solid var(--border-glass); background: var(--bg-secondary);">
+                <h4 id="active-chat-user">Select a conversation</h4>
             </div>
-            <div id="messages" class="messages-box">
-                <!-- Messages populate here -->
+            <div id="message-container" style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+                <!-- Real-time chat history -->
             </div>
-            <div class="chat-input-box">
-                <input type="text" id="message-input" placeholder="Type your message here..." onkeypress="checkEnter(event)">
-                <button onclick="sendMessage()">Send</button>
+            <div style="padding: 20px; border-top: 1px solid var(--border-glass); display: flex; gap: 10px; background: var(--bg-secondary);">
+                <input type="text" id="message-input" placeholder="Type a message..." style="margin-bottom: 0;">
+                <button onclick="sendMessage()" style="width: 100px;">Send</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        function authenticateUser() {
+            // Placeholder auth trigger transition
+            document.getElementById('auth-wrapper').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            if (!input.value.trim()) return;
+            
+            socket.emit('send_message', { chatId: 'general', content: input.value });
+            input.value = '';
+        }
+
+        socket.on('receive_message', (data) => {
+            const container = document.getElementById('message-container');
+            const msgDiv = document.createElement('div');
+            msgDiv.style.background = 'rgba(159, 73, 255, 0.15)';
+            msgDiv.style.padding = '10px 15px';
+            msgDiv.style.borderRadius = '8px';
+            msgDiv.style.maxWidth = '60%';
+            msgDiv.innerText = data.content;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        });
+    </script>
 </body>
 </html>
