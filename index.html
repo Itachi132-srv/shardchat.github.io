@@ -8,36 +8,42 @@
 </head>
 <body>
 
-    <!-- Login Screen -->
-    <div id="auth-screen" class="container">
+    <!-- Auth / Registration Screen -->
+    <div id="auth-screen" class="auth-container">
         <div class="card">
-            <h2>💜 Purple Chat</h2>
-            <p>Login or Register with your Email</p>
-            <input type="email" id="email" placeholder="Enter your email">
-            <input type="password" id="password" placeholder="Enter password">
-            <button onclick="loginUser()">Login / Sign Up</button>
+            <h2>Purple Chat</h2>
+            <p>Register or Login via Email</p>
+            <input type="email" id="email-input" placeholder="Enter Email Address">
+            <input type="password" id="password-input" placeholder="Enter Password">
+            <input type="text" id="username-input" placeholder="Enter Display Name">
+            <textarea id="bio-input" placeholder="Enter Bio" rows="2"></textarea>
+            <input type="text" id="pfp-input" placeholder="Profile Picture Image URL">
+            <button onclick="handleLogin()">Start Chatting</button>
         </div>
     </div>
 
-    <!-- Chat Screen (Hidden by default) -->
-    <div id="chat-screen" class="chat-container" style="display: none;">
+    <!-- Chat Screen -->
+    <div id="chat-screen" class="chat-container">
         <div class="sidebar">
-            <h3>Profile</h3>
-            <div class="profile-box">
-                <img id="display-pfp" src="https://via.placeholder.com/60" alt="PFP">
-                <h4 id="display-name">Username</h4>
-                <p id="display-bio">Hey there! I am using Purple Chat.</p>
+            <div>
+                <h3>My Profile</h3>
+                <div class="profile-box">
+                    <img id="display-pfp" src="https://via.placeholder.com/70" alt="PFP">
+                    <h4 id="display-name">Username</h4>
+                    <p id="display-bio">Bio goes here...</p>
+                </div>
             </div>
+            <button class="logout-btn" onclick="handleLogout()">Log Out</button>
         </div>
         <div class="chat-area">
             <div class="chat-header">
-                <h3>Global Chat Room</h3>
+                <h3>Global Public Room (Unlimited Messaging)</h3>
             </div>
             <div id="messages" class="messages-box">
-                <!-- Messages will appear here -->
+                <!-- Messages populate here -->
             </div>
             <div class="chat-input-box">
-                <input type="text" id="message-input" placeholder="Type a message or use emojis 😊...">
+                <input type="text" id="message-input" placeholder="Type your message here..." onkeypress="checkEnter(event)">
                 <button onclick="sendMessage()">Send</button>
             </div>
         </div>
@@ -46,4 +52,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
